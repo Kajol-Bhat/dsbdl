@@ -1,0 +1,179 @@
+hive> create database Employee;
+OK
+Time taken: 1.262 seconds
+hive> create table emp(firstname string,lastname string,employeeid int);
+OK
+Time taken: 1.3 seconds
+hive> ALTER DATABASE ourfirstdatabase SET DBPROPERTIES
+    >     > ('creator'=Swapnali Ware',
+    > 
+    > 
+    >     > ('creator'=Swapnali Ware',
+    > 
+    > 'created_for' = 'learning hive');
+MismatchedTokenException(26!=332)
+	at org.antlr.runtime.BaseRecognizer.recoverFromMismatchedToken(BaseRecognizer.java:617)
+	at org.antlr.runtime.BaseRecognizer.match(BaseRecognizer.java:115)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.keyValueProperty(HiveParser.java:36229)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.dbPropertiesList(HiveParser.java:4374)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.dbProperties(HiveParser.java:4275)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.alterDatabaseSuffixProperties(HiveParser.java:9721)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.alterDatabaseStatementSuffix(HiveParser.java:9623)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.alterStatement(HiveParser.java:7671)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.ddlStatement(HiveParser.java:2808)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.execStatement(HiveParser.java:1756)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.statement(HiveParser.java:1178)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:204)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:166)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:404)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:329)
+	at org.apache.hadoop.hive.ql.Driver.compileInternal(Driver.java:1158)
+	at org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1253)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1084)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1072)
+	at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:232)
+	at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:183)
+	at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:399)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:776)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:714)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:641)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+FAILED: ParseException line 2:4 extraneous input '>' expecting ( near '=' in specifying key/value property
+line 2:17 mismatched input 'Swapnali' expecting StringLiteral near '=' in specifying key/value property
+hive> ALTER DATABASE Employee SET DBPROPERTIES ('creator'='vansh','created_for'='learning');
+OK
+Time taken: 0.093 seconds
+hive> DESCRIBE DATABASE EXTENDED Employee;
+OK
+employee		hdfs://localhost:9000/user/hive/warehouse/employee.db	student	USER	{creator=vansh, created_for=learning}
+Time taken: 0.141 seconds, Fetched: 1 row(s)
+hive> insert into table Employee VALUES ('vansh','Kothari',7);
+FAILED: SemanticException org.apache.hadoop.hive.ql.metadata.InvalidTableException: Table not found Employee
+hive> insert into Employee VALUES ('vansh','Kothari',7);
+FAILED: SemanticException org.apache.hadoop.hive.ql.metadata.InvalidTableException: Table not found Employee
+hive> insert into table emp VALUES ('vansh','Kothari',7);
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+Query ID = student_20250421154603_c1fb1bda-989b-4efd-bca5-9bd8e2262e86
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1745228323902_0001, Tracking URL = http://student:8088/proxy/application_1745228323902_0001/
+Kill Command = /usr/local/hadoop/hadoop-2.7.0/bin/hadoop job  -kill job_1745228323902_0001
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2025-04-21 15:46:14,446 Stage-1 map = 0%,  reduce = 0%
+2025-04-21 15:46:21,850 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 3.31 sec
+MapReduce Total cumulative CPU time: 3 seconds 310 msec
+Ended Job = job_1745228323902_0001
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://localhost:9000/user/hive/warehouse/emp/.hive-staging_hive_2025-04-21_15-46-03_168_3355837938601769875-1/-ext-10000
+Loading data to table default.emp
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 3.31 sec   HDFS Read: 4296 HDFS Write: 83 SUCCESS
+Total MapReduce CPU Time Spent: 3 seconds 310 msec
+OK
+Time taken: 22.286 seconds
+hive> select * from emp;
+OK
+vansh	Kothari	7
+Time taken: 0.178 seconds, Fetched: 1 row(s)
+hive> create index ind on TABLE emp(employeeid) AS 'COMPACT' WITH DEFERRED BUILD;
+MismatchedTokenException(26!=218)
+	at org.antlr.runtime.BaseRecognizer.recoverFromMismatchedToken(BaseRecognizer.java:617)
+	at org.antlr.runtime.BaseRecognizer.match(BaseRecognizer.java:115)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.autoRebuild(HiveParser.java:6468)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.createIndexStatement(HiveParser.java:6007)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.ddlStatement(HiveParser.java:2928)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.execStatement(HiveParser.java:1756)
+	at org.apache.hadoop.hive.ql.parse.HiveParser.statement(HiveParser.java:1178)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:204)
+	at org.apache.hadoop.hive.ql.parse.ParseDriver.parse(ParseDriver.java:166)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:404)
+	at org.apache.hadoop.hive.ql.Driver.compile(Driver.java:329)
+	at org.apache.hadoop.hive.ql.Driver.compileInternal(Driver.java:1158)
+	at org.apache.hadoop.hive.ql.Driver.runInternal(Driver.java:1253)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1084)
+	at org.apache.hadoop.hive.ql.Driver.run(Driver.java:1072)
+	at org.apache.hadoop.hive.cli.CliDriver.processLocalCmd(CliDriver.java:232)
+	at org.apache.hadoop.hive.cli.CliDriver.processCmd(CliDriver.java:183)
+	at org.apache.hadoop.hive.cli.CliDriver.processLine(CliDriver.java:399)
+	at org.apache.hadoop.hive.cli.CliDriver.executeDriver(CliDriver.java:776)
+	at org.apache.hadoop.hive.cli.CliDriver.run(CliDriver.java:714)
+	at org.apache.hadoop.hive.cli.CliDriver.main(CliDriver.java:641)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.hadoop.util.RunJar.run(RunJar.java:221)
+	at org.apache.hadoop.util.RunJar.main(RunJar.java:136)
+FAILED: ParseException line 1:69 mismatched input 'BUILD' expecting KW_REBUILD near 'DEFERRED' in auto rebuild index
+hive> create index ind on TABLE emp(employeeid) AS 'COMPACT' WITH DEFERRED REBUILD;
+OK
+Time taken: 0.584 seconds
+hive> create table salary(employeeid int,salary int);
+OK
+Time taken: 0.121 seconds
+hive> insert into table salary VALUES (7,100000);
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+Query ID = student_20250421155146_697c7ef6-7d57-4936-b263-9fc5a25745c8
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1745228323902_0002, Tracking URL = http://student:8088/proxy/application_1745228323902_0002/
+Kill Command = /usr/local/hadoop/hadoop-2.7.0/bin/hadoop job  -kill job_1745228323902_0002
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2025-04-21 15:51:51,840 Stage-1 map = 0%,  reduce = 0%
+2025-04-21 15:51:57,069 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.96 sec
+MapReduce Total cumulative CPU time: 2 seconds 960 msec
+Ended Job = job_1745228323902_0002
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://localhost:9000/user/hive/warehouse/salary/.hive-staging_hive_2025-04-21_15-51-46_381_588229263751587199-1/-ext-10000
+Loading data to table default.salary
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 2.96 sec   HDFS Read: 4123 HDFS Write: 79 SUCCESS
+Total MapReduce CPU Time Spent: 2 seconds 960 msec
+OK
+Time taken: 13.135 seconds
+hive> select e.employeeid,e.firstname,s.salary,s.employeeid from emp e join salary s ON e.employeeid = s.employeeid;
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+Query ID = student_20250421155913_25adbe65-7195-44be-833b-48249964a08b
+Total jobs = 1
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/home/edureka/apache-hive-2.1.0-bin/lib/log4j-slf4j-impl-2.4.1.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/local/hadoop/hadoop-2.7.0/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+2025-04-21 15:59:19	Starting to launch local task to process map join;	maximum memory = 477626368
+2025-04-21 15:59:20	Dump the side-table for tag: 1 with group count: 1 into file: file:/tmp/student/f160d830-b151-4e3f-b421-685c06f64ed8/hive_2025-04-21_15-59-13_923_950489802758077550-1/-local-10004/HashTable-Stage-3/MapJoin-mapfile01--.hashtable
+2025-04-21 15:59:20	Uploaded 1 File to: file:/tmp/student/f160d830-b151-4e3f-b421-685c06f64ed8/hive_2025-04-21_15-59-13_923_950489802758077550-1/-local-10004/HashTable-Stage-3/MapJoin-mapfile01--.hashtable (283 bytes)
+2025-04-21 15:59:20	End of local task; Time Taken: 1.261 sec.
+Execution completed successfully
+MapredLocal task succeeded
+Launching Job 1 out of 1
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1745228323902_0003, Tracking URL = http://student:8088/proxy/application_1745228323902_0003/
+Kill Command = /usr/local/hadoop/hadoop-2.7.0/bin/hadoop job  -kill job_1745228323902_0003
+Hadoop job information for Stage-3: number of mappers: 1; number of reducers: 0
+2025-04-21 15:59:26,435 Stage-3 map = 0%,  reduce = 0%
+2025-04-21 15:59:32,697 Stage-3 map = 100%,  reduce = 0%, Cumulative CPU 3.3 sec
+MapReduce Total cumulative CPU time: 3 seconds 300 msec
+Ended Job = job_1745228323902_0003
+MapReduce Jobs Launched: 
+Stage-Stage-3: Map: 1   Cumulative CPU: 3.3 sec   HDFS Read: 6986 HDFS Write: 116 SUCCESS
+Total MapReduce CPU Time Spent: 3 seconds 300 msec
+OK
+7	vansh	100000	7
+Time taken: 20.962 seconds, Fetched: 1 row(s)
+hive> drop table salary;
+OK
+Time taken: 2.298 seconds
+hive> 
+
